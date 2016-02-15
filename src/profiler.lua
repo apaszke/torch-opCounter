@@ -88,7 +88,7 @@ local function ops_convolution(module, input)
     local output_width = math.floor((input_width + 2 * module.padW - module.kW) / module.dW + 1)
     local output_height = math.floor((input_height + 2 * module.padH - module.kH) / module.dH + 1)
 
-    return batch_size * output_width * output_height * ops_per_element
+    return batch_size * module.nOutputPlane * output_width * output_height * ops_per_element
 end
 
 local function ops_pooling(module, input)
