@@ -30,8 +30,7 @@ end
 -- Print total
 for name, count in pairs(per_layer) do
     if count > 0 then
-        local tabs = 4 - math.floor((#name + 1) / 8)
-        print(string.format('%s:%s%.2e ops', name, string.rep('\t', tabs), count))
+        printVerbose(string.format('%-32s%.2e ops', name..':', count))
     end
 end
-print(string.format('%sTotal:\t\t\t\t%.4e ops', sys.COLORS.blue, total))
+print(string.format('%s%-32s%.4e ops', sys.COLORS.blue, 'Total:', total))
