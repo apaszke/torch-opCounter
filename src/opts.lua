@@ -9,10 +9,16 @@ cmd:option('-checkpoint','','path to model checkpoint')
 cmd:option('-definition','','path to model definition')
 cmd:option('-inputSize','1x3x224x224','input tensor dimensions')
 cmd:option('-MACs',false,'use multiply-adds when counting ops')
+cmd:option('-verbose',false,'print verbose version')
 cmd:option('-nGPU',cutorch.getDeviceCount(),'input tensor dimensions')
 cmd:text()
 
 opt = cmd:parse(arg or {})
+
+function printVerbose(...)
+   if opt.verbose then print(...) end
+   return
+end
 
 if opt.checkpoint == '' and opt.definition == '' then
     print('No model specified!')

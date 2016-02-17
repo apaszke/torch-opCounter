@@ -11,9 +11,9 @@ paths.dofile('src/model.lua')
 
 local input = torch.randn(torch.LongStorage(opt.inputSize)):cuda()
 
-print('Counting ops...')
+printVerbose('Counting ops...')
 local total, layer_ops = count_ops(model, input)
-print('')
+printVerbose('')
 
 
 -- Compute per layer opt counts

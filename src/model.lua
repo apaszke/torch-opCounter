@@ -14,5 +14,5 @@ else
     assert(false, "Don't know how to load the model")
 end
 
-print('Model loaded!')
-print('')
+printVerbose('Model loaded!')
+printVerbose('')
