@@ -133,6 +133,8 @@ module_handlers = {
     -- Spatial Modules
     ['nn.SpatialConvolution'] = ops_convolution,
     ['nn.SpatialAveragePooling'] = ops_pooling,
+    ['nn.SpatialZeroPadding'] = ops_nothing,
+    ['nn.SpatialBatchNormalization'] = ops_nothing, -- Can be squashed
     ['cudnn.SpatialConvolution'] = ops_convolution,
     ['cudnn.SpatialBatchNormalization'] = ops_batchnorm,
     ['cudnn.SpatialMaxPooling'] = ops_pooling,
@@ -144,4 +146,6 @@ module_handlers = {
     -- Various modules
     ['nn.View'] = ops_nothing,
     ['nn.Reshape'] = ops_nothing,
+    ['nn.Dropout'] = ops_nothing, -- Is turned off in inference
+    ['nn.Concat'] = ops_nothing,
 }
