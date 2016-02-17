@@ -143,5 +143,5 @@ module_handlers = {
 
     -- Various modules
     ['nn.View'] = ops_nothing,
-    ['nn.Reshape'] = ops_nothing
+    ['nn.Reshape'] = ops_nothing,
 }
