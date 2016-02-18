@@ -136,7 +136,7 @@ module_handlers = {
     ['nn.SpatialZeroPadding'] = ops_nothing,
     ['nn.SpatialBatchNormalization'] = ops_nothing, -- Can be squashed
     ['cudnn.SpatialConvolution'] = ops_convolution,
-    ['cudnn.SpatialBatchNormalization'] = ops_batchnorm,
+    ['cudnn.SpatialBatchNormalization'] = ops_nothing, -- Can be squashed
     ['cudnn.SpatialMaxPooling'] = ops_pooling,
     ['cudnn.SpatialAveragePooling'] = ops_pooling,
 
