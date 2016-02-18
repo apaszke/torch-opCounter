@@ -115,6 +115,16 @@ local function ops_batchnorm(module, input)
     return input:nElement() * (multiply_adds and 1 or 2)
 end
 
+local function ops_sum(module, input)
+   assert(not module.nInputDims, 'nInputDims mode of nn.Sum not supported.')
+   local ops = 1
+   for d = 1, input:dim() do
+      local s = input:size(d)
+      ops = d ~= module.dimension and ops * s or ops * (s - 1)
+   end
+   return ops
+end
+
 module_handlers = {
     -- Containers
     ['nn.Sequential'] = ops_nothing,
@@ -129,6 +139,7 @@ module_handlers = {
 
     -- Basic modules
     ['nn.Linear'] = ops_linear,
+    ['nn.Sum'] = ops_sum,
 
     -- Spatial Modules
     ['nn.SpatialConvolution'] = ops_convolution,
