@@ -28,9 +28,10 @@ for i, info in pairs(layer_ops) do
 end
 
 -- Print total
+local ops = opt.MACs and 'MACs' or 'Ops'
 for name, count in pairs(per_layer) do
     if count > 0 then
-        printVerbose(string.format('%-32s%.2e ops', name..':', count))
+        printVerbose(string.format('%-32s%.2e %s', name..':', count, ops))
     end
 end
-print(string.format('%s%-32s%.4e ops', sys.COLORS.blue, 'Total:', total))
+print(string.format('%s%-32s%.4e %s', sys.COLORS.blue, 'Total:', total, ops))
