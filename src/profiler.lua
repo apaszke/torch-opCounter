@@ -128,9 +128,12 @@ end
 module_handlers = {
     -- Containers
     ['nn.Sequential'] = ops_nothing,
+    ['nn.Parallel'] = ops_nothing,
+    ['nn.Concat'] = ops_nothing,
     ['nn.gModule'] = ops_nothing,
     ['nn.Identity'] = ops_nothing,
     ['nn.DataParallelTable'] = ops_nothing,
+    ['nn.Contiguous'] = ops_nothing,
 
     -- Nonlinearities
     ['nn.ReLU'] = ops_nonlinearity,
