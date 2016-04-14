@@ -133,8 +133,8 @@ local function ops_unpooling(module, input)
     local input_width = input:size(4)
 
 
-    local output_width = input_width
-    local output_height = input_height
+    local output_width = (input_width - 1) * module.pooling.dW - (2 * module.pooling.padW - module.pooling.kW)
+    local output_height = (input_height - 1) * module.pooling.dH - (2 * module.pooling.padH - module.pooling.kH)
 
     return batch_size * output_width * output_height
 end
@@ -184,15 +184,14 @@ module_handlers = {
     ['nn.SpatialConvolution'] = ops_convolution,
     ['nn.SpatialFullConvolution'] = ops_fullconvolution,
     ['nn.SpatialMaxPooling'] = ops_pooling,
-    ['nn.SpatialMaxUnpooling'] = ops_unpooling,
     ['nn.SpatialAveragePooling'] = ops_pooling,
+    ['nn.SpatialMaxUnpooling'] = ops_unpooling,
     ['nn.SpatialZeroPadding'] = ops_nothing,
     ['nn.SpatialBatchNormalization'] = ops_nothing, -- Can be squashed
     ['cudnn.SpatialConvolution'] = ops_convolution,
     ['cudnn.SpatialFullConvolution'] = ops_fullconvolution,
     ['cudnn.SpatialBatchNormalization'] = ops_nothing, -- Can be squashed
     ['cudnn.SpatialMaxPooling'] = ops_pooling,
-    ['cudnn.SpatialMaxUnpooling'] = ops_unpooling,
     ['cudnn.SpatialAveragePooling'] = ops_pooling,
 
     -- Table modules
