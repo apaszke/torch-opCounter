@@ -91,6 +91,25 @@ local function ops_convolution(module, input)
     return batch_size * module.nOutputPlane * output_width * output_height * ops_per_element
 end
 
+local function ops_fullconvolution(module, input)
+    assert(input:dim() == 4, "ops_fullconvolution supports only batched inputs!")
+    assert(input:size(2) == module.nInputPlane, "number of input planes doesn't match!")
+    local batch_size = input:size(1)
+    local input_planes = input:size(2)
+    local input_height = input:size(3)
+    local input_width = input:size(4)
+
+    -- ops per input element
+    local single_kernel_ops = module.kH * module.kW * output_planes * (multiply_adds and 1 or 2)
+    local sample_kernel_ops = input_planes * input_width * input_height * single_kernel_ops
+
+    local output_width = (input_width - 1) * module.dW - 2 * module.padW + module.kW + module.adjW
+    local output_height = (input_height - 1) * module.dH - 2 * module.padW + module.kH + module.adjH
+    local bias_ops = output_width * output_height * module.nOutputPlane
+
+    return batch_size * (sample_kernel_ops + bias_ops)
+end
+
 local function ops_pooling(module, input)
     assert(input:dim() == 4, "ops_averagepooling supports only batched inputs!")
     local batch_size = input:size(1)
@@ -163,6 +182,7 @@ module_handlers = {
 
     -- Spatial Modules
     ['nn.SpatialConvolution'] = ops_convolution,
+    ['nn.SpatialFullConvolution'] = ops_fullconvolution,
     ['nn.SpatialMaxPooling'] = ops_pooling,
     ['nn.SpatialAveragePooling'] = ops_pooling,
     ['nn.SpatialMaxUnpooling'] = ops_unpooling,
