@@ -122,7 +122,7 @@ local function ops_pooling(module, input)
     local output_width = math.floor((input_width + 2 * module.padW - module.kW) / module.dW + 1)
     local output_height = math.floor((input_height + 2 * module.padH - module.kH) / module.dH + 1)
 
-    return batch_size * output_width * output_height * kernel_ops
+    return batch_size * input_planes * output_width * output_height * kernel_ops
 end
 
 local function ops_unpooling(module, input)
