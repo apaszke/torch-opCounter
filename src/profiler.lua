@@ -81,8 +81,9 @@ local function ops_convolution(module, input)
     local input_width = input:size(4)
 
     -- ops per output element
-    local kernel_ops = module.kH * module.kW * input_planes * (multiply_adds and 1 or 2)
-    local bias_ops = 1
+    local groups = module.groups or 1
+    local kernel_ops = module.kH * module.kW * (input_planes / groups) * (multiply_adds and 1 or 2)
+    local bias_ops = module.bias and 1 or 0
     local ops_per_element = kernel_ops + bias_ops
 
     local output_width = math.floor((input_width + 2 * module.padW - module.kW) / module.dW + 1)
