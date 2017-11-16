@@ -159,6 +159,28 @@ local function ops_sum(module, input)
    return ops
 end
 
+local function ops_volumetric_convolution(module, input)
+    assert(input:dim() == 5, "ops_convolution supports only batched inputs!")
+    assert(input:size(2) == module.nInputPlane, "number of input planes doesn't match!")
+    local batch_size = input:size(1)
+    local input_planes = input:size(2)
+    local input_depth = input:size(3)
+    local input_height = input:size(4)
+    local input_width = input:size(5)
+
+    -- ops per output element
+    local groups = module.groups or 1
+    local kernel_ops = module.kH * module.kW * module.kT * (input_planes / groups) * (multiply_adds and 1 or 2)
+    local bias_ops = module.bias and 1 or 0
+    local ops_per_element = kernel_ops + bias_ops
+
+    local output_width = math.floor((input_width + 2 * module.padW - module.kW) / module.dW + 1)
+    local output_height = math.floor((input_height + 2 * module.padH - module.kH) / module.dH + 1)
+    local output_depth = math.floor((input_depth + 2 * module.padT - module.kT) / module.dT + 1)
+
+    return batch_size * module.nOutputPlane * output_width * output_height * output_depth * ops_per_element
+end
+
 module_handlers = {
     -- Containers
     ['nn.Sequential'] = ops_nothing,
@@ -193,6 +215,9 @@ module_handlers = {
     ['cudnn.SpatialBatchNormalization'] = ops_nothing, -- Can be squashed
     ['cudnn.SpatialMaxPooling'] = ops_pooling,
     ['cudnn.SpatialAveragePooling'] = ops_pooling,
+
+    -- Volumetric Modules
+    ['nn.VolumetricConvolution'] = ops_volumetric_convolution,
 
     -- Table modules
     ['nn.CAddTable'] = ops_caddtable,
